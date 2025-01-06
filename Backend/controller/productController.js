@@ -1,8 +1,10 @@
 
 import Product from "../models/productModel.js";
+import ApiFeatures from "../utils/ApiFeatures.js";
 export const getProducts = async (req, res) => {
+    const apiFeatures = new ApiFeatures(Product.find(), req.query).search();
     try {
-        const products = await Product.find({});
+        const products = await apiFeatures.query;
         res.json(products);
     } catch (error) {
         res.status(500).json({ error: error.message });
