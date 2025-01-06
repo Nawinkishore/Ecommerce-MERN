@@ -2,7 +2,7 @@
 import Product from "../models/productModel.js";
 import ApiFeatures from "../utils/ApiFeatures.js";
 export const getProducts = async (req, res) => {
-    const apiFeatures = new ApiFeatures(Product.find(), req.query).search();
+    const apiFeatures = new ApiFeatures(Product.find(), req.query).search().filter();
     try {
         const products = await apiFeatures.query;
         res.json(products);
