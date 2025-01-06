@@ -11,7 +11,7 @@ const productSchema = mongoose.Schema({
     category: [
         {
             type: String, required: true,
-            enum: ['Electronics', 'Cameras', 'Laptops', 'Accessories', 'Headphones', 'Food', 'Books', 'Clothes/Shoes', 'Beauty/Health', 'Sports', 'Outdoor', 'Home']
+            enum: ['Electronics', 'Cameras', 'Laptops', 'Accessories', 'Headphones', 'Food', 'Books', 'Clothes/Shoes', 'Beauty/Health', 'Sports', 'Outdoor', 'Home','Smartphones']
         }
     ],
     price: { type: Number, required: true },
