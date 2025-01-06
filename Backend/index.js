@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/dataBase.js';
 import productRoute from './Routes/productRoute.js';
+import authRoute from './Routes/authRoute.js';
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -12,4 +13,5 @@ app.listen(port, () => {
 connectDB();
 
 app.use('/productApi', productRoute);
+app.use('/authApi', authRoute);
 
