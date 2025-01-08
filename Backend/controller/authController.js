@@ -1,4 +1,5 @@
 import catchAsyncError from "../middleware/catchAsyncError.js";
+import Product from "../models/productModel.js";
 import User from "../models/userModel.js";
 export const createUser = catchAsyncError(async (req, res) => {
    try{
@@ -11,9 +12,12 @@ export const createUser = catchAsyncError(async (req, res) => {
     });
     const createdUser = await user.save();
     res.status(201).json(createdUser);
+    
    }
     catch(error){
      res.status(500).json({ error: error.message });
     }
     
 });
+
+
