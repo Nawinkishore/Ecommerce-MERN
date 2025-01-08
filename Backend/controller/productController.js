@@ -25,8 +25,8 @@ export const getProductById = async (req, res) => {
     }
 };
 export const createProduct = async (req, res) => {
-    const { name, images, brand, category, description, price, countInStock, rating, numReviews } = req.body;
 
+    const { name, images, brand, category, description, price, countInStock, rating, numReviews } = req.body;
     // Log the request body for debugging
     // console.log('Request body:', req.body);
 
@@ -39,7 +39,8 @@ export const createProduct = async (req, res) => {
         price,
         countInStock,
         rating,
-        numReviews
+        numReviews,
+        user : req.user._id
     });
 
     try {
