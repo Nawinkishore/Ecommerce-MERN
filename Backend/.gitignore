@@ -1,10 +1,8 @@
-# Ignore environment file
+
 .env
 
-# Ignore node_modules folder
 node_modules/
 
-# Ignore build output or logs
 dist/
 logs/
 *.log
