@@ -230,3 +230,92 @@ export const changePassword = catchAsyncError(async (req, res) => {
             res.status(500).json({ message: error.message });
         }
     });
+
+    //Admin Routes
+
+    // Get all users
+    export const getUsers = catchAsyncError(async (req, res) => {
+        try {
+            const users = await User.find();
+            res.status(200).json(users);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    });
+
+    // Get user by ID (Admin)
+    export const getUserById = catchAsyncError(async (req, res, next) => {
+        try {
+            const user = await User.findById(req.params.id.trim()); // Trim the ID
+            if (!user) {
+                return next(new Error('User not found'));
+            }
+            res.status(200).json({ message: 'User found', user });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    });
+
+    // Admin : Update user
+    export const updateUser = catchAsyncError(async (req, res) => {
+        try {
+            const { name, email, role } = req.body;
+            const user = await User.findById(req.params.id.trim()); // Trim the ID
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Update email only if it's different and doesn't already exist
+            if (email && email !== user.email) {
+                if (!validator.isEmail(email)) {
+                    return res.status(400).json({ message: 'Invalid email address' });
+                }
+
+                const emailExists = await User.findOne({ email });
+                if (emailExists) {
+                    return res.status(400).json({ message: 'Email already exists' });
+                }
+                user.email = email;
+            }
+
+            // Update name if provided
+            if (name) {
+                user.name = name;
+            }
+
+            // Update role if provided
+            if (role) {
+                user.role = role;
+            }
+
+            // Save the updated user
+            await user.save();
+
+            res.status(200).json({
+                message: 'Profile updated successfully',
+                user: {
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                }
+            });
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    });
+
+    // Admin : Delete user
+    export const deleteUser = catchAsyncError(async (req, res) => {
+        try {
+            const user = await User.findById(req.params.id.trim()); // Trim the ID
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            await user.deleteOne(user)
+            res.status(200).json({ message: 'User deleted successfully' });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    });

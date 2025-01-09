@@ -1,6 +1,7 @@
 
 import Product from "../models/productModel.js";
 import ApiFeatures from "../utils/ApiFeatures.js";
+import catchAsyncError from "../middleware/catchAsyncError.js";
 export const getProducts = async (req, res) => {
     const resPerPage = 2; // results per page
     const apiFeatures = new ApiFeatures(Product.find(), req.query).search().filter().paginate(resPerPage);
@@ -24,33 +25,44 @@ export const getProductById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-export const createProduct = async (req, res) => {
-
-    const { name, images, brand, category, description, price, countInStock, rating, numReviews } = req.body;
-    // Log the request body for debugging
-    // console.log('Request body:', req.body);
-
-    const product = new Product({
-        name,
-        images,
-        brand,
-        category,
-        description,
-        price,
-        countInStock,
-        rating,
-        numReviews,
-        user : req.user._id
-    });
-
+export const createProduct = catchAsyncError(async (req, res) => {
     try {
-        const createdProduct = await product.save();
-        res.status(201).json(createdProduct);
+        const {
+            name,
+            images,
+            brand,
+            description,
+            category,
+            price,
+            countInStock,
+            rating,
+            numReviews
+        } = req.body;
+
+        const product = await Product.create({
+            name,
+            images,
+            brand,
+            description,
+            category,
+            price,
+            countInStock,
+            rating,
+            numReviews,
+            user: req.user._id, // Ensure user is included
+        });
+
+        res.status(201).json({
+            success: true,
+            product,
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
     }
-   
-};
+});
 
 export const editProduct = async (req, res) => {
     const { name, images, brand, category, description, price, countInStock, rating, numReviews } = req.body;

@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './config/dataBase.js';
 import productRoute from './Routes/productRoute.js';
 import authRoute from './Routes/authRoute.js';
+import orderRoute from './Routes/orderRoute.js';
 import cookieParser from 'cookie-parser';
 dotenv.config();
 const app = express();
@@ -19,4 +20,6 @@ connectDB();
 
 app.use('/productApi', productRoute);
 app.use('/authApi', authRoute);
+app.use('/orderApi', orderRoute);
+
 
