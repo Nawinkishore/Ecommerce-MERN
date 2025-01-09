@@ -1,4 +1,5 @@
     import catchAsyncError from "../middleware/catchAsyncError.js";
+    import validator from 'validator';
     import User from "../models/userModel.js";
     import bcrypt from "bcrypt";
     import generateToken from "../middleware/generateToken.js";
@@ -181,5 +182,51 @@ export const changePassword = catchAsyncError(async (req, res) => {
         res.status(200).json({ message: 'Password updated successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
+
     }
 });
+//Update Profile
+
+    export const updateProfile = catchAsyncError(async (req, res) => {
+        try {
+            const { name, email } = req.body;
+            const user = await User.findById(req.user.id);
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Update email only if it's different and doesn't already exist
+            if (email && email !== user.email) {
+                if (!validator.isEmail(email)) {
+                    return res.status(400).json({ message: 'Invalid email address' });
+                }
+
+                const emailExists = await User.findOne({ email });
+                if (emailExists) {
+                    return res.status(400).json({ message: 'Email already exists' });
+                }
+                user.email = email;
+            }
+
+            // Update name if provided
+            if (name) {
+                user.name = name;
+            }
+
+            // Save the updated user
+            await user.save();
+
+            res.status(200).json({
+                message: 'Profile updated successfully',
+                user: {
+                    name: user.name,
+                    email: user.email,
+                    avatar: user.avatar, // Optionally include any other user details
+                }
+            });
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    });
