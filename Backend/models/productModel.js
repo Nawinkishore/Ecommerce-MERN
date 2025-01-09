@@ -17,6 +17,13 @@ const productSchema = mongoose.Schema({
     countInStock: { type: Number, required: true },
     rating: { type: Number, required: true },
     numReviews: { type: Number, required: true },
+    reviews: [
+        {
+            name: {type: String, required: true},
+            rating: {type: Number, required: true},
+            comment: {type: String, required: true}
+        }
+    ],
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
