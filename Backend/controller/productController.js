@@ -4,7 +4,7 @@ import ApiFeatures from "../utils/ApiFeatures.js";
 import catchAsyncError from "../middleware/catchAsyncError.js";
 
 export const getProducts = catchAsyncError(async (req, res) => {
-    const resPerPage = 2; // results per page
+    const resPerPage = 3; // results per page
     const apiFeatures = new ApiFeatures(Product.find(), req.query).search().filter().paginate(resPerPage);
     try {
         const products = await apiFeatures.query;
