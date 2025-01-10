@@ -110,3 +110,79 @@ export const deleteProduct = catchAsyncError(async (req, res) => {
     }
 
 });
+
+// create product review
+
+export const createProductReview = catchAsyncError(async (req, res) => {
+    const { rating, comment, productId } = req.body;
+    try {
+        const product = await Product.findById(productId);
+        const alreadyReviewed = product.reviews.find(
+            (r) => r.user.toString() === req.user._id.toString()
+        );
+
+        if (alreadyReviewed) {
+           product.reviews.forEach((review) => {
+               if (review.user.toString() === req.user._id.toString()) {
+                   review.comment = comment;
+                   review.rating = rating;
+               }
+           });
+        }
+
+        const review = {
+            rating: Number(rating),
+            comment,
+            user: req.user._id,
+        };
+
+        product.reviews.push(review);
+        product.numReviews = product.reviews.length;
+        // Calculate the rating of the product
+        product.rating =
+            product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+            product.reviews.length;
+        product.rating = isNaN(product.rating) ? 0 : product.rating;
+        await product.save({ validateBeforeSave: false });
+
+        res.status(201).json({ message: 'Review added' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get  product reviews
+// GET /reviews?id=productId
+export const getProductReviews = catchAsyncError(async (req, res) => {
+    const productId = req.query.id;
+    try {
+        const product = await Product.findById(productId);
+        res.json(product.reviews);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete product review
+// DELETE /reviews?id=productId
+export const deleteReview = catchAsyncError(async (req, res) => {
+    const productId = req.query.id;
+    const reviewId = req.query.reviewId;
+    try {
+        const product = await Product.findById(productId);
+        const reviews = product.reviews.filter(
+            (review) => review._id.toString() !== reviewId
+        );
+        const numReviews = reviews.length;
+        let rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / numReviews;
+       rating =  isNaN(rating) ? 0 : rating;
+        await Product.findByIdAndUpdate(productId, {
+            reviews,
+            numReviews,
+            rating,
+        });
+        res.json({ message: 'Review deleted' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
