@@ -8,11 +8,13 @@ export const getProducts = catchAsyncError(async (req, res) => {
     const apiFeatures = new ApiFeatures(Product.find(), req.query).search().filter().paginate(resPerPage);
     try {
         const products = await apiFeatures.query;
-        res.json(products);
+        // Wrap the result in a products key
+        res.json({ success: true, products });  // Now it returns { products: [...] }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 });
+
 
 export const getProductById = catchAsyncError(async (req, res) => {
         const productId = req.params.id;
@@ -183,6 +185,6 @@ export const deleteReview = catchAsyncError(async (req, res) => {
         });
         res.json({ message: 'Review deleted' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 });
