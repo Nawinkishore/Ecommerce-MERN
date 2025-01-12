@@ -8,7 +8,9 @@ export const getProducts = async (dispatch) => {
         const { data } = await axios.get(`${baseUrl}/productApi/getProducts`);
 
         // Assuming data contains a 'products' key.
-        dispatch(productsSuccess(data.products));  // Accessing the products array
+        setTimeout(() => {
+            dispatch(productsSuccess(data.products)); // Accessing the products array
+        }, 2000); // Delay of 3 seconds
 
     } catch (error) {
         dispatch(productsFail(error.response && error.response.data.message
