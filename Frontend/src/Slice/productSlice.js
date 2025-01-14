@@ -1,27 +1,32 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
-    loading : false,
+    loading: false,
+    product: [],  // Initialize products as an empty array
+    error: null,   // Initialize error as null
 };
+
 const productSlice = createSlice({
     name: "product",
     initialState,
     reducers: {
-        productsRequest: (state) => {
-           return {
+        productRequest: (state) => {
+            return {
                 loading: true
-           }
+            };
         },
-        productsSuccess: (state,action) => {
+        productSuccess: (state, action) => {
             return {
                 loading: false,
-                products: action.payload
-            }
+                product: action.payload
+            };
         },
-        productsFail: (state,action) => {
+        productFail: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         }
     }
 });
-export const {productsRequest,productsSuccess,productsFail} = productSlice.actions;
+
+export const { productRequest, productSuccess, productFail } = productSlice.actions;
 export default productSlice.reducer;

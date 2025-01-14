@@ -21,7 +21,7 @@ export const getProductById = catchAsyncError(async (req, res) => {
         try {
             const product = await Product.findById(productId);
             if (product) {
-                res.json(product);
+                res.json({ success: true, product });
             } else {
                 res.status(404).json({ message: 'Product not found' });
             }
