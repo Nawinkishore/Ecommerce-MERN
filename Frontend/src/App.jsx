@@ -16,7 +16,7 @@ const App = () => {
                 <ToastContainer
                 theme={"dark"}
                 />
-              <div className="flex-1 flex">
+              <div className="flex flex-1 items-center justify-center">
                   <Routes>
                       <Route path="/" element={<Home />} />
                       {/*<Route path="/about" element={<About />} />*/}
