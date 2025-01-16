@@ -9,7 +9,9 @@ export const getProducts = catchAsyncError(async (req, res) => {
     try {
         const products = await apiFeatures.query;
         // Wrap the result in a products key
-        res.json({ success: true, products });  // Now it returns { products: [...] }
+        const totalCounts = await Product.countDocuments({}); // Get the total number of products
+        res.json({ success: true, products,totalCounts,resPerPage });  // Now it returns { products: [...] }
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

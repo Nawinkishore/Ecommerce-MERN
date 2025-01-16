@@ -6,6 +6,7 @@ import Loader from "../layout/Loader.jsx";
 import Typography from "@mui/material/Typography";
 import Rating from "@mui/material/Rating";
 import { toast } from "react-toastify";
+import MetaData from "../MetaData.jsx";
 
 const ProductDetail = () => {
     const { product, loading, error } = useSelector((state) => state.productState);
@@ -33,10 +34,12 @@ const ProductDetail = () => {
 
     return (
         <div className={'p-3'}>
+
             {loading ? (
                 <Loader />
             ) : product && (
                 <div className={'flex items-center justify-center gap-5'}>
+                    <MetaData title={product.name}/>
                     <img src={productImage} alt="Product" className={'w-64'} />
                     <div>
                         <h1 className={'text-2xl text-white'}>{product.name}</h1>
