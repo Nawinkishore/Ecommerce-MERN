@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import MetaData from "./MetaData.jsx";
+import MetaData from "../MetaData.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../actions/productsAction.js";
-import Loader from "./layout/Loader.jsx";
+import { getProducts } from "../../actions/productsAction.js";
+import Loader from "../layout/Loader.jsx";
 import { toast } from "react-toastify";
-import Products from "./Product/Products.jsx";
+import Products from "./Products.jsx";
 import Pagination from '@mui/material/Pagination';
+import { useParams } from "react-router-dom";
 
-const Home = () => {
+const ProductSearch = () => {
+    const { keyword } = useParams();
     const dispatch = useDispatch();
     const { loading, error, products, totalCounts = 0, resPerPage = 10 } = useSelector(state => state.productsState);
     const [currentPage, setCurrentPage] = useState(1);
@@ -20,8 +22,8 @@ const Home = () => {
         if (error) {
             toast.error(error);
         }
-        dispatch(getProducts(currentPage,null));  // Pass the current page to the action creator
-    }, [dispatch, error, currentPage]);
+        dispatch(getProducts(currentPage,keyword));  // Pass the current page to the action creator
+    }, [dispatch, error, currentPage ,keyword]);
 
     return (
         <>
@@ -39,13 +41,13 @@ const Home = () => {
             </div>
             <div className={'flex justify-center items-center m-5 w-full '}>
                 <Pagination color={'primary'}
-                    count={Math.ceil(totalCounts / resPerPage)}
-                    page={currentPage}
-                    onChange={setCurrentPageNo}
+                            count={Math.ceil(totalCounts / resPerPage)}
+                            page={currentPage}
+                            onChange={setCurrentPageNo}
                 />
             </div>
         </>
     );
 };
 
-export default Home;
+export default ProductSearch;

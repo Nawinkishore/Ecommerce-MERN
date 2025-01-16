@@ -7,6 +7,7 @@ import {Routes,Route} from "react-router-dom";
 import  {HelmetProvider} from "react-helmet-async";
 import {ToastContainer} from "react-toastify";
 import ProductDetail from "./components/Product/ProductDetail.jsx";
+import ProductSearch from "./components/Product/ProductSearch.jsx";
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
               <div className="flex-1 ">
                   <Routes>
                       <Route path="/" element={<Home />} />
+                      <Route path='/search/:keyword' element={<ProductSearch />} />
                       {/*<Route path="/about" element={<About />} />*/}
                       {/*<Route path="/contact" element={<Contact />} />*/}
                       {/*<Route path="/products" element={<Products />} />*/}
