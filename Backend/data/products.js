@@ -52,7 +52,7 @@ const products = [
         images: "/images/dell.jpg",
         description: "Dell XPS 13 2020",
         brand: "Dell",
-        category: "Electronics",
+        category: "Laptops",
         price: 1199.99,
         countInStock: 7,
         rating: 4.5,
