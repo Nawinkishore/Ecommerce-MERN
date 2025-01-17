@@ -9,6 +9,7 @@ import {ToastContainer} from "react-toastify";
 import ProductDetail from "./components/Product/ProductDetail.jsx";
 import ProductSearch from "./components/Product/ProductSearch.jsx";
 
+
 const App = () => {
     return (
         <div className="flex flex-col min-h-screen"  >
@@ -17,7 +18,7 @@ const App = () => {
                 <ToastContainer
                 theme={"dark"}
                 />
-              <div className="flex-1 ">
+              <div className="flex-1 p-5 ">
                   <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path='/search/:keyword' element={<ProductSearch />} />
